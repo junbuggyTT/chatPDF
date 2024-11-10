@@ -6,10 +6,14 @@ import React from "react";
 import { useDropzone } from "react-dropzone"
 import axios from "axios";
 import { toast } from "react-hot-toast";
+import { useRouter } from "next/navigation";
+
+// https://github.com/aws/aws-sdk-js-v3/issues/4126
 
 const FileUpload = () => {
+    const router = useRouter();
     const [uploading, setUploading] = React.useState(false);
-    const { mutate, isLoading } = useMutation({
+    const { mutate } = useMutation({
         mutationFn: async ({
           file_key,
           file_name,
@@ -39,16 +43,19 @@ const FileUpload = () => {
             try {
                 setUploading(true);
                 const data = await uploadToS3(file);
+                console.log("meow", data);
                 if (!data?.file_key || !data.file_name) {
                     toast.error("Something went wrong");
                     return;
                   }
                   mutate(data, {
-                    onSuccess: (data) => {
-                      toast.success(data.message);
+                    onSuccess: ({chat_id}) => {
+                      toast.success("Chat created!");
+                      router.push(`/chat/${chat_id}`);
                     },
                     onError: (err) => {
                       toast.error("Error creating chat");
+                      console.error(err);
                     },
                   });
                 console.log("data", data);
@@ -69,7 +76,7 @@ const FileUpload = () => {
                 })}
             >
                 <input {...getInputProps()} />
-                    {uploading || isLoading ? (
+                    {uploading ? (
                     <>
                         {/* loading state */}
                         <Loader2 className="h-10 w-10 text-blue-500 animate-spin" />
