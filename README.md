@@ -28,7 +28,7 @@ This project requires Node.js version 13.4.19 or later.
 1. Clone the repository
 Open your terminal and run:
 ```
-git clone https://github.com/your-repo/chatpdf.git
+git clone https://github.com/junbuggyTT/chatPDF
 ```
 
 2. Navigate to the project directory
