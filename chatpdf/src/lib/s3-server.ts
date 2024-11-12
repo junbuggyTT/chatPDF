@@ -20,7 +20,7 @@ export async function downloadFromS3(file_key: string): Promise<string> {
         
         const obj = await s3.getObject(params);
         // console.log(obj);
-        const file_name = path.join(os.tmpdir(), `dasion${Date.now().toString()}.pdf`);
+        const file_name = path.join(os.tmpdir(), `${Date.now().toString()}.pdf`);
         
         if (obj.Body instanceof require("stream").Readable) {
         // AWS-SDK v3 has some issues with their typescript definitions, but this works
