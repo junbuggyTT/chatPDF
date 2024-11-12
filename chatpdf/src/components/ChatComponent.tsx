@@ -7,11 +7,13 @@ import { Send } from "lucide-react";
 import MessageList from "./MessageList";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
-import React from "react";
+import React, { useState } from "react";
+import { useRouter } from "next/navigation";
 
 type Props = { chatId: number };
 
 const ChatComponent = ({ chatId }: Props) => {
+    const router = useRouter();
     const { data, isLoading } = useQuery({
         queryKey: ["chat", chatId],
         queryFn: async () => {
@@ -29,6 +31,7 @@ const ChatComponent = ({ chatId }: Props) => {
         },
         initialMessages: data || [],
     });
+
     React.useEffect(() => {
         const messageContainer = document.getElementById("message-container");
         if (messageContainer) {
@@ -39,17 +42,21 @@ const ChatComponent = ({ chatId }: Props) => {
         }
     }, [messages]);
     return (
-        <div
-            className="relative max-h-screen overflow-scroll"
-            id="message-container"
-        >
+        <div className="flex flex-col h-screen">
             {/* header */}
-            <div className="sticky top-0 inset-x-0 p-2 bg-white h-fit">
+            <div className="sticky top-0 inset-x-0 p-2 bg-white h-fit z-10 flex items-center justify-between">
                 <h3 className="text-xl font-bold">Chat</h3>
             </div>
 
             {/* message list */}
             <MessageList messages={messages} isLoading={isLoading} />
+            <div
+                className="flex-grow overflow-auto p-2 bg-gray-50"
+                id="message-container"
+            >
+                <MessageList messages={messages} isLoading={isLoading} />
+            </div>
+
             <form
                 onSubmit={handleSubmit}
                 className="sticky bottom-0 inset-x-0 px-2 py-4 bg-white"
@@ -67,7 +74,7 @@ const ChatComponent = ({ chatId }: Props) => {
                 </div>
             </form>
         </div>
-    )
+    );
 };
 
 export default ChatComponent;
