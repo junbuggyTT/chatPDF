@@ -42,6 +42,7 @@ npm install
 ```
 
 4. Set Up Environment Variables
+
 Create a .env file in the root directory of your project and add the required environment variables.
 
 5. Run the project
